@@ -33,8 +33,9 @@ export class Joke {
 @Component({
   selector: 'joke-list',
   template: `
+    <joke-form (outData)="addJoke($event)"></joke-form>
     <div class="list-group">
-      <joke class="list-group-item" *ngFor="let j of jokes" [joke]="j"></joke>
+      <joke class="list-group-item" *ngFor="let j of jokes" [testoo]="j"></joke>
     </div>
   `
 })
@@ -49,6 +50,10 @@ export class JokeListComponent {
       new Joke("A kid threw a lump of cheddar at me", "I thought ‘That’s not very mature’")
     ]
   }
+
+  addJoke(ev: any){
+    this.jokes.unshift(ev);
+  }
 }
 
 @Component({
@@ -56,18 +61,34 @@ export class JokeListComponent {
   template: `
     <h1 class="setup title">{{data.setup}}</h1>
     <p class="punchline description" [hidden]="data.hide">{{data.punchline}}</p>
-    <button (click)="data.toggle()">Tell Me</button>
+    <button (click)="data.toggle()" class="btn btn-primary">Tell Me</button>
   `
 })
 
 export class JokeComponent {
-  @Input('joke') data: Joke;
-  
+  @Input('testoo') data: Joke;
 }
+
+@Component({
+  selector: 'joke-form',
+  templateUrl: 'joke-form-component.html',
+  styleUrls: ['joke-form-component.css']
+})
+
+export class JokeFormComponent {
+
+  @Output() outData = new EventEmitter<Joke>();
+  
+  createJoke(setup: string, punchline: string){
+    this.outData.emit(new Joke(setup, punchline));
+  }
+
+}
+
 
 @NgModule({
   imports: [BrowserModule],
-  declarations: [AppComponent, JokeComponent, JokeListComponent],
+  declarations: [AppComponent, JokeComponent, JokeListComponent, JokeFormComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {
