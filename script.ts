@@ -65,6 +65,7 @@ export class JokeListComponent {
   `
 })
 
+
 export class JokeComponent {
   @Input('testoo') data: Joke;
 }
