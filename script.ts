@@ -62,6 +62,7 @@ export class JokeListComponent {
 
 export class JokeComponent {
   @Input('joke') data: Joke;
+  
 }
 
 @NgModule({
