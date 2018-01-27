@@ -1,5 +1,16 @@
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {Component, NgModule, Input, Output, EventEmitter, ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  NgModule,
+  Input,
+  Output,
+  EventEmitter,
+  ViewEncapsulation,
+  Directive,
+  ElementRef,
+  Renderer,
+  HostListener,
+  HostBinding } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 @Component({
@@ -35,7 +46,7 @@ export class Joke {
   template: `
     <joke-form (outData)="addJoke($event)"></joke-form>
     <div class="list-group">
-      <joke class="list-group-item" *ngFor="let j of jokes" [testoo]="j"></joke>
+      <joke class="list-group-item hoverColor" *ngFor="let j of jokes" [testoo]="j"></joke>
     </div>
   `
 })
@@ -60,8 +71,7 @@ export class JokeListComponent {
   selector: 'joke',
   template: `
     <h1 class="setup title">{{data.setup}}</h1>
-    <p class="punchline description" [hidden]="data.hide">{{data.punchline}}</p>
-    <button (click)="data.toggle()" class="btn btn-primary">Tell Me</button>
+    <p class="punchline description" [style.display]="'none'">{{data.punchline}}</p>
   `
 })
 
@@ -86,10 +96,31 @@ export class JokeFormComponent {
 
 }
 
+@Directive({
+  selector: '.hoverColor'
+})
+
+class HoverColorDirect {
+  @HostBinding('class.hoverActive') private  isHovering: boolean;
+
+  constructor(private el: ElementRef, private rd: Renderer ){}
+  @HostListener('mouseover') onHover(){
+    let seltr = this.el.nativeElement.querySelector('.punchline');
+    this.rd.setElementStyle(seltr, 'display', "block");
+    this.isHovering = true;
+  }
+
+  @HostListener('mouseout') onHoverOut(){
+    let seltr = this.el.nativeElement.querySelector('.punchline');
+    this.rd.setElementStyle(seltr, 'display', "none");
+    this.isHovering = false;
+  }
+}
+
 
 @NgModule({
   imports: [BrowserModule],
-  declarations: [AppComponent, JokeComponent, JokeListComponent, JokeFormComponent],
+  declarations: [AppComponent, JokeComponent, JokeListComponent, JokeFormComponent, HoverColorDirect],
   bootstrap: [AppComponent]
 })
 export class AppModule {
