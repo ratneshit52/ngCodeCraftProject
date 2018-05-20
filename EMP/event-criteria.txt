@@ -1,0 +1,3 @@
+https://cbseventmanagement-api-dot-thermal-wonder-200107.appspot.com/api/event/addevent
+
+https://cbseventmanagement-api-dot-thermal-wonder-200107.appspot.com/api/event/get
